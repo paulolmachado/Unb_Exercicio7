@@ -7,6 +7,8 @@
 #            persistencia ou de comunicacao de dados.
 #
 
+from G03FormulaModeloEval import *
+#from G03FormulaModeloArvore import *
 from G03FormulaControladoraMonolitica import *
 
 def recuperar (TipoControladora, ModoPersistencia, codigo):
@@ -57,11 +59,9 @@ def limpar(TipoControladora, ModoPersistencia):
     elif TipoControladora == "FTP":
         return limpar_ftp(ModoPersistencia)
 
-def validar(formula):
-    try:
-        resultado = eval(formula)
-    except:
-        return "erro"
-    else:
-        return str(resultado)
+def validar(ValidacaoFormula, formula):
+    if ValidacaoFormula == "eval":
+        return validar_eval(formula)
+    #else:
+    #    return validar_arvore(formula)
 

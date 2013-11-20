@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 # -*- coding: iso-8859-15 -*-
 
-from calculadora import *
+#from calculadora import *
 
 numeros   = ["0","1","2","3","4","5","6","7","8","9","10"]
 operacoes = ["/","*","+","-"]
@@ -67,7 +67,7 @@ def contaOperacoes(formula):
         if (caracter in operacoes):
             quantidade = quantidade + 1
     return quantidade
-    
+
 def retiraNumero(formula):
     numero = ""
     for caracter in formula:
@@ -76,10 +76,10 @@ def retiraNumero(formula):
         else:
             break
     return numero
-    
+
 def posicaoParentesesAbertura(formula):
     return formula.find("(")
-    
+
 def posicaoParentesesFechamento(formula):
     idx,parenteses = 0, 0
     for caracter in formula:
@@ -91,7 +91,7 @@ def posicaoParentesesFechamento(formula):
                 return idx
         idx = idx+1
     return 0
-    
+
 def temParentesesExternosAlinhados(formula):
     idx,parenteses = 0, 0
     for caracter in formula:
@@ -103,7 +103,7 @@ def temParentesesExternosAlinhados(formula):
                 return ((formula[0]=="(") and ((idx+1)==len(formula)))
         idx = idx+1
     return False
-    
+
 def voltaAtrasUmaOperacao(formula, idx1):
     idx = idx1 - 1
     while ((idx>0) and (formula[idx-1] in numeros)):
@@ -111,7 +111,7 @@ def voltaAtrasUmaOperacao(formula, idx1):
     if (idx > 0):
         return idx
     return idx1
-    
+
 def montaArvoreRecursivo(formula):
     noh = [None, None, None, None]
     if ((formula=="") or (formula==None)):
@@ -127,7 +127,7 @@ def montaArvoreRecursivo(formula):
     idx1 = posicaoParentesesAbertura(formula)
 ## Localiza o parentese que encerra o primeiro parentese encontrado na formula e coloca a posicao na variavel idx2.
     idx2 = posicaoParentesesFechamento(formula)
-	
+
 ## Se o parentese for encontrado na primeiro posicao da formula ...
 ##   retorna uma lista de 4 elementos:
 ##   1. lista resultado da funcao montaArvoreRecursivo passando a primeira parte da formula identificada entre as posicoes idx1 e idx2.
@@ -167,7 +167,7 @@ def montaArvoreRecursivo(formula):
                 if (idx1 != -1):
 
 ## Entao verifica novamente se ainda ha alguma operacao matematica por fazer ...
-                    if (contaOperacoes(formula) > 1): 
+                    if (contaOperacoes(formula) > 1):
 
 ##   retorna uma lista de 4 elementos:
 ##   1. lista resultado da funcao montaArvoreRecursivo passando a primeira parte da formula, antes de idx1.
@@ -219,15 +219,15 @@ def executaArvoreRecursivo(arvore):
     strprimeiro = arvore[0]
     strsegundo  = arvore[2]
     if ((type(arvore[0])==list) and (arvore[0][3]!=None)):
-        strprimeiro = arvore[0][3] 
+        strprimeiro = arvore[0][3]
     if ((type(arvore[2])==list) and (arvore[2][3]!=None)):
-        strsegundo = arvore[2][3] 
+        strsegundo = arvore[2][3]
     arvore[3] = executaCalculadora(operacao, int(strprimeiro), int(strsegundo))
     return
-      
+
 def apresentarArvore(formula, resultado):
-    print formula + " = " 
-    
+    print formula + " = "
+
 # Lista de formulas aonde lista = [nonono, nonono, nonono]
 formulas  = [ "5 + ((4/2) + 1 + 3)/2", "(5+4/2)+(3+1*9)", "5+2+1*((4*3)+1+2)", "((3/3) + 4)", "7 + 4 / 2 + (5 * 1)"]
 

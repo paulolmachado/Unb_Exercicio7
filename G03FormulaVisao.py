@@ -12,14 +12,16 @@
 from G03FormulaControladora import *
 import sys
 
-opcoes = ["GET","POST","PUT","DELETE","OPTIONS","HEAD","TRACE","CONNECT","PERSIST","CONTROL","QUIT"]
+opcoes = ["GET","POST","PUT","DELETE","OPTIONS","HEAD","TRACE","CONNECT","PERSIST","CONTROL","QUIT","VALID"]
 TipoControladora = "Monolitica" # Valores possiveis: Monolitica | Berkeley | FTP
 ModoPersistencia = "Textual" # Valores possiveis: Textual | SGBD
+ValidacaoFormula = "eval" # Valores possiveis: eval | arvore
 
 def VisaoEmiteComando(opcao):
     global opcoes
     global TipoControladora
     global ModoPersistencia
+    global ValidacaoFormula
 
     argumentos = opcao.split() # Separa argumentos
     comando = argumentos[0].upper() # Obtem primeiro argumento: comando
@@ -38,6 +40,7 @@ def VisaoEmiteComando(opcao):
                 CONNECT <formula>      # Executar formula
                 PERSIST <tipo>         # Tipo de Persistencia (Textual ou SGBD) - Default: Textual
                 CONTROL <tipo>         # Tipo de Controladora (Monolitica ou Berkeley ou FTP) - Defaul: Monolitica
+                VALID <tipo>           # Tipo de validacao de formula (eval ou arvore) - Default: eval
                 QUIT
         """
 
@@ -90,17 +93,17 @@ def VisaoEmiteComando(opcao):
         if formula == None:
             return "Registro nao existe."
         else:
-            if validar(formula) == "erro":
+            if validar(ValidacaoFormula, formula) == "erro":
                 return "Formula invalida:"+formula
             else:
-                return validar(formula)
+                return validar(ValidacaoFormula, formula)
 
     if comando == "CONNECT":
         formula = opcao[len(comando)+1:]
-        if validar(formula) == "erro":
+        if validar(ValidacaoFormula, formula) == "erro":
             return "Formula invalida:"+formula
         else:
-            return validar(formula)
+            return validar(ValidacaoFormula, formula)
 
     if comando == "PERSIST":
         if (argumentos[1] != "Textual") and (argumentos[1] != "SGBD"):
@@ -115,3 +118,10 @@ def VisaoEmiteComando(opcao):
         else:
             TipoControladora = argumentos[1]
             return "Tipo de controladora alterada para "+TipoControladora
+
+    if comando == "VALID":
+        if (argumentos[1] != "eval") and (argumentos[1] != "arvore"):
+            return "Tipo de parametro invalido. Esperado eval ou arvore. Recebido:"+argumentos[1]
+        else:
+            ValidacaoFormula = argumentos[1]
+            return "Tipo de validacao de formula alterada para "+ValidacaoFormula
