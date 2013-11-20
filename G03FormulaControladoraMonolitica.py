@@ -7,8 +7,8 @@
 #            persistencia ou de comunicacao de dados.
 #
 
-#from G03FormulaPersistenciaSGBD import *
 from G03FormulaPersistenciaTextual import *
+from G03FormulaPersistenciaSGBD import *
 
 def recuperar_monolitica(ModoPersistencia, codigo):
     if ModoPersistencia == "Textual":

@@ -76,27 +76,4 @@ def textual_limpar():
     __fechar()
     return registros
 
-# Teste de chamadas as funcoes definidas acima
-
-#print "Limpando tudo ..."
-#print limpar() # Limpar todos os registros
-#print "Adicinando uma formula (1 + 2) ..."
-#print incluir('(1 + 2)') # Incluir uma formula
-#print "Adicinando uma formula (4 / 2) ..."
-#print incluir('(4 / 2)') # Incluir outra formula
-#print "Adicinando uma formula (8 / 2) ..."
-#print incluir('(8 / 2)') # Incluir outra formula
-#print "Recuperando a primeira formula ..."
-#print recuperar(1) # Recuperar a primeira formula inserida
-#print "Listando as formulas ..."
-#print listar() # Listar todas as formulas
-#print "Alternado a primeira formula ..."
-#print alterar(1,'(3 * 4)') # Alterar a primeira formula
-#print "Listando as formulas ..."
-#print listar() # Listar novamente todas as formulas
-#print "Excluindo a segunda formula ..."
-#print excluir(1) # Excluir a primeira formula
-#print "Listando as formulas ..."
-#print listar() # Listar novamente todas as formulas
-#print "Fim"
 
