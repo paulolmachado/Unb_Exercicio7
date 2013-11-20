@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: iso-8859-15 -*-
 #
 # Modulo: Controladora Geral
 # Descricao: Seleciona, baseado no tipo de controladora e no modo de persistencia
@@ -10,6 +11,7 @@
 from G03FormulaModeloEval import *
 #from G03FormulaModeloArvore import *
 from G03FormulaControladoraMonolitica import *
+from G03FormulaControladoraP2PClienteBerkeleySocket import *
 
 def recuperar (TipoControladora, ModoPersistencia, codigo):
     if TipoControladora == "Monolitica":
