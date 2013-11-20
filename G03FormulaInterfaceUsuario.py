@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: iso-8859-15 -*-
 #
 # Modulo de Interface de usuario.
 # Descricao: basicamente recebe o comando do usuario e submente a camada de Visao, e deixa
@@ -8,7 +9,7 @@
 #            Teoricamente, essa camada de "Interface do Usuario" podera ser substituido por
 #            qualquer outra, como por exemplo, um browser web. Por isso, foi mantida a sintaxe dos
 #            comandos em uma unica linha como por exemplo "GET 1" ou "POST (1 + 2)"
-# 
+#
 
 from G03FormulaVisao import *
 import sys
@@ -16,10 +17,10 @@ import sys
 opcao = ""
 
 while opcao.upper() != "QUIT":
-    
+
     opcao = raw_input("Entre com a opcao: ")
 
     if opcao.upper() != "QUIT":
         print VisaoEmiteComando(opcao)
-        
+
 print "Fim do programa"

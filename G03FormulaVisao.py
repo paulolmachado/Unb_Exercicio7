@@ -15,12 +15,12 @@ import sys
 opcoes = ["GET","POST","PUT","DELETE","OPTIONS","HEAD","TRACE","CONNECT","PERSIST","CONTROL","QUIT"]
 TipoControladora = "Monolitica" # Valores possiveis: Monolitica | Berkeley | FTP
 ModoPersistencia = "Textual" # Valores possiveis: Textual | SGBD
-    
+
 def VisaoEmiteComando(opcao):
     global opcoes
     global TipoControladora
     global ModoPersistencia
-    
+
     argumentos = opcao.split() # Separa argumentos
     comando = argumentos[0].upper() # Obtem primeiro argumento: comando
 
@@ -38,9 +38,9 @@ def VisaoEmiteComando(opcao):
                 CONNECT <formula>      # Executar formula
                 PERSIST <tipo>         # Tipo de Persistencia (Textual ou SGBD) - Default: Textual
                 CONTROL <tipo>         # Tipo de Controladora (Monolitica ou Berkeley ou FTP) - Defaul: Monolitica
-                QUIT 
+                QUIT
         """
-    
+
     if comando == "GET":
         codigo = argumentos[1]
         formula = recuperar(TipoControladora, ModoPersistencia, int(codigo))
@@ -60,7 +60,7 @@ def VisaoEmiteComando(opcao):
         if codigo == None:
             return "Registro nao encontrado."
         else:
-            return "Registro alterado. Codigo:", codigo
+            return "Registro alterado. Codigo:"+str(codigo)
 
     if comando == "DELETE":
         codigo = argumentos[1]
@@ -72,37 +72,36 @@ def VisaoEmiteComando(opcao):
 
     if comando == "OPTIONS":
         formulas = listar(TipoControladora, ModoPersistencia)
-        if (formulas): 
+        if (formulas):
             resultado = ""
             for formula in formulas:
-                resultado = resultado + str(formula[0])+"="+formula[1] + "\n"
+                resultado = resultado + formula + "\n"
             return resultado
         else:
             return "Lista vazia"
-            
+
     if comando == "HEAD":
         formulas = limpar(TipoControladora, ModoPersistencia)
         return "Lista de formulas eliminada."
-        
+
     if comando == "TRACE":
         codigo = argumentos[1]
         formula = recuperar(TipoControladora, ModoPersistencia, int(codigo))
         if formula == None:
             return "Registro nao existe."
         else:
-            if validar(formula): 
+            if validar(formula) == "erro":
                 return "Formula invalida:"+formula
             else:
-                resultado = eval(formula)
-                return resultado
-                    
+                return validar(formula)
+
     if comando == "CONNECT":
         formula = opcao[len(comando)+1:]
-        if validar(formula):
-            return eval(formula)
+        if validar(formula) == "erro":
+            return "Formula invalida:"+formula
         else:
-            return "Formula Invalida"
-                
+            return validar(formula)
+
     if comando == "PERSIST":
         if (argumentos[1] != "Textual") and (argumentos[1] != "SGBD"):
             return "Tipo de parametro invalido. Esperado Textual ou SGBD. Recebido:"+argumentos[1]

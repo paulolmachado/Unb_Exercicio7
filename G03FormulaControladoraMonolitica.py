@@ -5,7 +5,7 @@
 #            a funcao adequada para tratamento da solicitacao. Desta forma, em uma
 #            mesma camada controladora, pode-se optar por diversos tipos de
 #            persistencia ou de comunicacao de dados.
-# 
+#
 
 #from G03FormulaPersistenciaSGBD import *
 from G03FormulaPersistenciaTextual import *
@@ -21,12 +21,12 @@ def incluir_monolitica(ModoPersistencia, formula):
         return textual_incluir(formula)
     elif ModoPersistencia == "SGBD":
         return sgbd_incluir(formula)
-    
-def alterar_monolitica(ModoPersistencia, formula):
+
+def alterar_monolitica(ModoPersistencia, codigo, formula):
     if ModoPersistencia == "Textual":
-        return textual_alterar(formula)
+        return textual_alterar(codigo, formula)
     elif ModoPersistencia == "SGBD":
-        return sgbd_alterar(formula)
+        return sgbd_alterar(codigo, formula)
 
 def excluir_monolitica(ModoPersistencia, formula):
     if ModoPersistencia == "Textual":
@@ -34,17 +34,17 @@ def excluir_monolitica(ModoPersistencia, formula):
     elif ModoPersistencia == "SGBD":
         return sgbd_excluir(formula)
 
-def listar_monolitica(ModoPersistencia, formula):
+def listar_monolitica(ModoPersistencia):
     if ModoPersistencia == "Textual":
-        return textual_listar(formula)
+        return textual_listar()
     elif ModoPersistencia == "SGBD":
-        return sgbd_listar(formula)
+        return sgbd_listar()
 
-def limpar_monolitica(ModoPersistencia, formula):
+def limpar_monolitica(ModoPersistencia):
     if ModoPersistencia == "Textual":
-        return textual_limpar(formula)
+        return textual_limpar()
     elif ModoPersistencia == "SGBD":
-        return sgbd_limpar(formula)
+        return sgbd_limpar()
 
 
-    
+

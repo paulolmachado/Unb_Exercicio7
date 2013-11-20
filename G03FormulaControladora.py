@@ -5,7 +5,7 @@
 #            a funcao adequada para tratamento da solicitacao. Desta forma, em uma
 #            mesma camada controladora, pode-se optar por diversos tipos de
 #            persistencia ou de comunicacao de dados.
-# 
+#
 
 from G03FormulaControladoraMonolitica import *
 
@@ -27,12 +27,12 @@ def incluir (TipoControladora, ModoPersistencia, formula):
 
 def alterar(TipoControladora, ModoPersistencia, codigo, formula):
     if TipoControladora == "Monolitica":
-        return alterar_monolitica(ModoPersistencia, formula)
+        return alterar_monolitica(ModoPersistencia, codigo, formula)
     elif TipoControladora == "Berkeley":
-        return alterar_berkeley(ModoPersistencia, formula)
+        return alterar_berkeley(ModoPersistencia, codigo, formula)
     elif TipoControladora == "FTP":
-        return alterar_ftp(ModoPersistencia, formula)
-    
+        return alterar_ftp(ModoPersistencia, codigo, formula)
+
 def excluir(TipoControladora, ModoPersistencia, codigo):
     if TipoControladora == "Monolitica":
         return excluir_monolitica(ModoPersistencia, codigo)
@@ -61,7 +61,7 @@ def validar(formula):
     try:
         resultado = eval(formula)
     except:
-        return false
+        return "erro"
     else:
-        return true
+        return str(resultado)
 
