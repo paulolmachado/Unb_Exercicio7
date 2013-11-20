@@ -1,3 +1,4 @@
-1. Elaborar Validação de Fórmula por Árvore
-2. Adicionar parametro para controle de erro nas chamadas das funções.
-3. 
+1. Elaborar Validaï¿½ï¿½o de Fï¿½rmula por ï¿½rvore
+2. Adicionar parametro para controle de erro nas chamadas das funï¿½ï¿½es.
+3. Mudar a chamada de ValidaÃ§Ã£o de FÃ³rmula para Controladora Monolitica.
+4. Ajustar a Controladora geral para chamar a validaÃ§Ã£o na Controladora Monolitica.
