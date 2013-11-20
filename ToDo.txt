@@ -1,3 +1,3 @@
-1. Mover a validação da fórmula (CONNECT e TRACE) da camada da Visao para a camada da Controladora.
+1. Elaborar Validação de Fórmula por Árvore
 2. Adicionar parametro para controle de erro nas chamadas das funções.
 3. 

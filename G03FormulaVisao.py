@@ -12,7 +12,7 @@
 from G03FormulaControladora import *
 import sys
 
-opcoes = ["GET","POST","PUT","DELETE","OPTIONS","HEAD","TRACE","CONNECT","PERSIST","CONTROL","QUIT","VALID"]
+opcoes = ["GET","POST","PUT","DELETE","OPTIONS","HEAD","TRACE","CONNECT","PERSIST","CONTROL","VALID"]
 TipoControladora = "Monolitica" # Valores possiveis: Monolitica | Berkeley | FTP
 ModoPersistencia = "Textual" # Valores possiveis: Textual | SGBD
 ValidacaoFormula = "eval" # Valores possiveis: eval | arvore
