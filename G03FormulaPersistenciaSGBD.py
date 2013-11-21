@@ -3,7 +3,7 @@
 #
 # Modulo: Persistencia em banco de dados
 # Descricao: Persiste e recupera as formulas em bancos de dados MySQL.
-#            A criação da tabela para armazenar as formulas foi criada a partir dos
+#            A criação do database e da tabela para armazenar as formulas foi feito a partir dos
 #            comandos abaixo (conectado no banco de dados como root):
 #
 #            create database appdist;
@@ -60,7 +60,7 @@ def sgbd_recuperar(chave):
   result = cursor.fetchone()
   __desconectar()
   if result == None:
-    return None
+    return "Registro nao encontrado"
   for valor in result:
     return valor
 
@@ -70,35 +70,34 @@ def sgbd_incluir(formula):
   __conectar()
   cursor.execute("insert into formula (codigo, valor) values (%s,%s)",(str(proximo),formula))
   __desconectar()
-  return proximo
+  return "Registro incluido:"+str(proximo)
 
 def sgbd_excluir(chave):
   global cursor
   if sgbd_recuperar(chave) == None: # Testa primeiro pra ver se a chave existe
-    return None
+    return "Registro nao encontrado"
   else:
     __conectar()
     #cursor.execute("delete from formula where codigo = %s",str(chave))
     cursor.execute("update formula set valor='' where codigo = %s",str(chave))
     __desconectar()
-    return chave
+    return "Registro deletado. Codigo:"+str(chave)
 
 def sgbd_alterar(chave,formula):
   global cursor
   if sgbd_recuperar(chave) == None: # Testa primeiro pra ver se a chave existe
-    return None
+    return "Registro nao encontrado"
   else:
     __conectar()
     cursor.execute("update formula set valor = %s where codigo = %s",(formula,str(chave)))
     __desconectar()
-    return chave
+    return "Registro alterado. Codigo:"+str(chave)
 
 def sgbd_listar():
   global cursor
   __conectar()
   cursor.execute("select codigo,valor from formula")
-  result = [item[0] for item in cursor.fetchall()]
-  ##result = cursor.fetchall()
+  result = [item[1] for item in cursor.fetchall()]
   __desconectar()
   return result
 
@@ -111,5 +110,5 @@ def sgbd_limpar():
   #cursor.close()
   #cnx.commit()
   __desconectar()
-  return result
+  return "Lista de formulas eliminada."
 

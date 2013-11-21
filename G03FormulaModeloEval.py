@@ -2,9 +2,10 @@
 # -*- coding: iso-8859-15 -*-
 
 def validar_eval(formula):
+    if formula == None:
+        return "Formula vazia"
     try:
         resultado = eval(formula)
+        return str(resultado)
     except:
-        return "formula invalida"
-    finally:
-        return resultado
+        return "Formula invalida"

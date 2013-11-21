@@ -1,7 +1,18 @@
+#!/usr/bin/env python
+# -*- coding: iso-8859-15 -*-
+#
+# Modulo: Persistencia Textual
+# Descricao: Prover a persistencia das formulas em um arquivo local chamado "formulas.txt".
+#            Cada linha do arquivo possui uma formula. A variavel "codigo" referenciado no
+#            no programa corresponde ao numero da linha no arquivo.
+#
+
 import sys
 
 arq=''
 registros=[]
+
+###################### Funcoes de apoio
 
 def __abrir(modo):
     global arq
@@ -28,13 +39,13 @@ def __recuperar_registros(): # Recupera as formulas do arquivo em uma lista
         registros = registros + [linha.replace("\n","")]
     __fechar()
 
-
+############################### Funcoes de Processamento
 
 def textual_recuperar(chave):
     global registros
     __recuperar_registros()
-    if chave > len(registros) or chave < 1:
-        return None
+    if chave > len(registros) or (chave < 1):
+        return "Registro nao encontrado"
     else:
         return registros[chave-1]
 
@@ -43,27 +54,27 @@ def textual_incluir(formula):
     __recuperar_registros()
     registros += [formula] # Adiciona formula nos registros
     __salvar_registros()
-    return len(registros)
+    return "Registro incluido:"+str(len(registros))
 
 def textual_excluir(chave):
     global registros
     __recuperar_registros()
     if chave > len(registros) or chave < 1:
-        return None
+        return "Registro nao encontrado"
     else:
         registros[chave-1]=''
         __salvar_registros()
-        return chave
+        return "Registro deletado. Codigo:"+str(chave)
 
 def textual_alterar(chave,formula):
     global registros
     __recuperar_registros()
     if chave > len(registros) or chave < 1:
-        return None
+        return "Registro nao encontrado"
     else:
         registros[chave-1]=formula
         __salvar_registros()
-        return chave
+        return "Registro alterado. Codigo:"+str(chave)
 
 def textual_listar():
     global registros
@@ -74,6 +85,6 @@ def textual_limpar():
     __abrir('w')
     arq.write('')
     __fechar()
-    return registros
+    return "Lista de formulas eliminada."
 
 

@@ -1,16 +1,15 @@
 #!/usr/bin/env python
+# -*- coding: iso-8859-15 -*-
 #
 # Modulo: Visao
-# Descricao: Recebe os comandos GET, POST, PUT, DELETE, OPTIONS, HEAD, TRACE e CONNECT
-#            acompanhados dos respectivos parametros e chama as devidas funcoes na
-#            camada da Controladora.
-#            Junto com a chamada das funcoes na Controladora, tambem informa qual o
-#            modo de persistencia (Textual ou SGBD) e qual o tipo de Controladora
-#            (Monolitica, P2P com Berkeley Socket ou FTP).
+# Descricao: Recebe os comandos GET, POST, PUT, DELETE, OPTIONS, HEAD, TRACE, CONNECT, PERSIST, CONTROL e VALID
+#            acompanhados dos respectivos parametros e chama a funcao para processamento na camada da Controladora.
+#            Junto com a chamada das funcoes na Controladora, tambem processa e informa qual o modo de
+#            persistencia (Textual ou SGBD), qual o tipo de Controladora (Monolitica, P2P com Berkeley Socket
+#            ou FTP) e também o tipo de validação de fórmula (eval ou arvore).
 #
 
 from G03FormulaControladora import *
-import sys
 
 opcoes = ["GET","POST","PUT","DELETE","OPTIONS","HEAD","TRACE","CONNECT","PERSIST","CONTROL","VALID"]
 TipoControladora = "Monolitica" # Valores possiveis: Monolitica | Berkeley | FTP
@@ -41,87 +40,63 @@ def VisaoEmiteComando(opcao):
                 PERSIST <tipo>         # Tipo de Persistencia (Textual ou SGBD) - Default: Textual
                 CONTROL <tipo>         # Tipo de Controladora (Monolitica ou Berkeley ou FTP) - Defaul: Monolitica
                 VALID <tipo>           # Tipo de validacao de formula (eval ou arvore) - Default: eval
-                QUIT
+                QUIT                   # Sai do programa (valido apenas na camada de interface do usuario)
         """
 
+    # Define os parametros codigo (posicao da formula na base) e formula (formula propriamente dita)
     if comando == "GET":
-        codigo = argumentos[1]
-        formula = recuperar(TipoControladora, ModoPersistencia, int(codigo))
-        if formula == None:
-            return "Registro nao encontrado."
-        else:
-            return formula
+        codigo = int(argumentos[1])
+        formula = None
 
-    if comando == "POST":
-        codigo = incluir(TipoControladora, ModoPersistencia, opcao[len(comando)+1:])
-        return "Registro incluido. Codigo:"+str(codigo)
-
-    if comando == "PUT":
-        codigo = argumentos[1]
-        formula = opcao[len(comando)+1:][len(codigo)+1:]
-        codigo = alterar(TipoControladora, ModoPersistencia, int(codigo), formula)
-        if codigo == None:
-            return "Registro nao encontrado."
-        else:
-            return "Registro alterado. Codigo:"+str(codigo)
-
-    if comando == "DELETE":
-        codigo = argumentos[1]
-        codigo = excluir(TipoControladora, ModoPersistencia, int(codigo))
-        if codigo == None:
-            return "Registro nao encontrado."
-        else:
-            return "Registro deletado. Codigo:"+str(codigo)
-
-    if comando == "OPTIONS":
-        formulas = listar(TipoControladora, ModoPersistencia)
-        if (formulas):
-            resultado = ""
-            for formula in formulas:
-                resultado = resultado + formula + "\n"
-            return resultado
-        else:
-            return "Lista vazia"
-
-    if comando == "HEAD":
-        formulas = limpar(TipoControladora, ModoPersistencia)
-        return "Lista de formulas eliminada."
-
-    if comando == "TRACE":
-        codigo = argumentos[1]
-        formula = recuperar(TipoControladora, ModoPersistencia, int(codigo))
-        if formula == None:
-            return "Registro nao existe."
-        else:
-            if validar(ValidacaoFormula, formula) == "erro":
-                return "Formula invalida:"+formula
-            else:
-                return validar(ValidacaoFormula, formula)
-
-    if comando == "CONNECT":
+    elif comando == "POST":
+        codigo = None
         formula = opcao[len(comando)+1:]
-        if validar(ValidacaoFormula, formula) == "erro":
-            return "Formula invalida:"+formula
-        else:
-            return validar(ValidacaoFormula, formula)
 
-    if comando == "PERSIST":
+    elif comando == "PUT":
+        codigo = int(argumentos[1])
+        formula = opcao[len(comando)+len(argumentos[1])+2:]
+
+    elif comando == "DELETE":
+        codigo = int(argumentos[1])
+        formula = None
+
+    elif comando == "OPTIONS":
+        codigo = None
+        formula = None
+
+    elif comando == "HEAD":
+        codigo = None
+        formula = None
+
+    elif comando == "TRACE":
+        codigo = int(argumentos[1])
+        formula = None
+
+    elif comando == "CONNECT":
+        codigo = None
+        formula = opcao[len(comando)+1:]
+
+    elif comando == "PERSIST":
         if (argumentos[1] != "Textual") and (argumentos[1] != "SGBD"):
             return "Tipo de parametro invalido. Esperado Textual ou SGBD. Recebido:"+argumentos[1]
         else:
             ModoPersistencia = argumentos[1]
             return "Tipo de pesistencia alterada para "+ModoPersistencia
 
-    if comando == "CONTROL":
+    elif comando == "CONTROL":
         if (argumentos[1] != "Monolitica") and (argumentos[1] != "Berkeley") and (argumentos[1] != "FTP"):
             return "Tipo de parametro invalido. Esperado Monolitica ou Berkeley ou FTP. Recebido:"+argumentos[1]
         else:
             TipoControladora = argumentos[1]
             return "Tipo de controladora alterada para "+TipoControladora
 
-    if comando == "VALID":
+    elif comando == "VALID":
         if (argumentos[1] != "eval") and (argumentos[1] != "arvore"):
             return "Tipo de parametro invalido. Esperado eval ou arvore. Recebido:"+argumentos[1]
         else:
             ValidacaoFormula = argumentos[1]
             return "Tipo de validacao de formula alterada para "+ValidacaoFormula
+
+    # Chama rotina para processamento dos comandos
+    return processa_comando(ModoPersistencia,TipoControladora,ValidacaoFormula,comando,codigo,formula)
+
