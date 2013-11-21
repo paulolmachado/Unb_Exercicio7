@@ -2,7 +2,7 @@
 # -*- coding: iso-8859-15 -*-
 #
 # Modulo: Cliente Berkeley Socket
-# Descricao: Responsavel por remontar e enviar o comando ao server Berkeley Socket.
+# Descricao: Responsavel por encapusular os parametros e enviar ao servidor Berkeley Socket.
 #
 
 import socket

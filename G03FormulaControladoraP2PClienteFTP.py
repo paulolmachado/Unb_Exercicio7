@@ -1,84 +1,36 @@
-from G03Persistencia_SGBD import *
-import sys
+#!/usr/bin/env python
+# -*- coding: iso-8859-15 -*-
+#
+# Modulo: Cliente FTP
+# Descricao: Responsavel por encapusular os parametros e enviar ao servidor FTP
+#
 
-comando = ""
-opcoes = ["GET","POST","PUT","DELETE","OPTIONS","HEAD","TRACE","CONNECT","QUIT"]
+import ftplib
+#import os
+import string
+import warnings
+import socket
 
-while comando != "QUIT":
-    opcao = raw_input("Entre com a opcao: ")
-    argumentos = opcao.split() # Separa argumentos
-    comando = argumentos[0].upper() # Obtem primeiro argumento: comando
-    
-    if not any(comando in s for s in opcoes):
-        print """
-            Sintaxe:
-                GET <codigo>           # Recuperar
-                POST <formula>         # Incluir
-                PUT <codigo> <formula> # Alterar
-                DELETE <codigo>        # Excluir
-                OPTIONS                # Listar todas
-                HEAD                   # Limpar todas
-                TRACE <codigo>         # Executar formula da base
-                CONNECT <formula>      # Executar formula
-                QUIT 
-        """
-    
-    if comando == "GET":
-        codigo = argumentos[1]
-        formula = recuperar(int(codigo))
-        if formula == None:
-            print "Registro nao existe."
-        else:
-            print "Formula:",formula
-    if comando == "POST":
-        codigo = incluir(opcao[len(comando)+1:])
-        print "Registro incluido. Codigo:", codigo
-    if comando == "PUT":
-        codigo = argumentos[1]
-        formula = opcao[len(comando)+1:][len(codigo)+1:]
-        codigo = alterar(int(codigo), formula)
-        if codigo == None:
-            print "Registro nao existe."
-        else:
-            print "Registro alterado. Codigo:", codigo
-    if comando == "DELETE":
-        codigo = argumentos[1]
-        codigo = excluir(int(codigo))
-        if codigo == None:
-            print "Registro nao existe."
-        else:
-            print "Registro deletado. Codigo:", codigo
-    if comando == "OPTIONS":
-        formulas = listar() 
-        if (formulas): 
-            for formula in formulas:
-                print str(formula[0])+"="+formula[1]
-        else:
-            print "Lista vazia"
-    if comando == "HEAD":
-        formulas = limpar()
-        print "Lista de formulas eliminada."
-    if comando == "TRACE":
-        codigo = argumentos[1]
-        formula = recuperar(int(codigo))
-        if formula == None:
-            print "Registro nao existe."
-        else:
-            if (formula): 
-                try:  
-                    resultado = eval(formula)
-                except:
-                    print "Formula invalida:",formula
-                else:
-                    print resultado
-    if comando == "CONNECT":
-        formula = opcao[len(comando)+1:]
-        if (formula): 
-            try:  
-                resultado = eval(formula)
-            except:
-                print "Formula invalida:",formula
-            else:
-                print resultado
-                
-print "Fim do Programa"
+def __enviar_comando(mensagem):
+    p2p_server_host = "127.0.0.1"
+    p2p_server_port = 8081
+    p2p_timeout=10
+    p2p_usuario="dummy"
+    p2p_senha="dummy"
+
+    try:
+        ftp = ftplib.FTP()
+        ftp.connect(host=p2p_server_host, port=p2p_server_port, timeout=p2p_timeout)
+        ftp.login(p2p_usuario, p2p_senha)
+        data = ftp.retrlines("RETR " + mensagem)
+        ftp.quit()
+        return data
+    except:
+        return "Erro ao conectar via FTP"
+
+def envia_comando_berkeley(ModoPersistencia,ValidacaoFormula,comando,codigo,formula):
+    # Encapsula mensagem separando os campos com pipes, antes de enviar.
+    if formula == None:
+        formula = ""
+    mensagem = ModoPersistencia+"|"+ValidacaoFormula+"|"+comando+"|"+str(codigo)+"|"+formula
+    return __enviar_comando(mensagem)
