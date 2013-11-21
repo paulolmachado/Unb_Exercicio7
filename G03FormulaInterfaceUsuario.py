@@ -18,7 +18,7 @@ while opcao.upper() != "QUIT":
 
     opcao = raw_input("Entre com a opcao: ")
 
-    if opcao.upper() != "QUIT":
-        print VisaoEmiteComando(opcao)
+    if opcao.upper() != "QUIT":        # Se for diferente de QUIT,
+        print VisaoEmiteComando(opcao) # envia comando para camada de Visao.
 
 print "Fim do programa"

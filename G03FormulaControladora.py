@@ -18,76 +18,33 @@ def processa_comando(ModoPersistencia,TipoControladora,ValidacaoFormula,comando,
     #print "codigo:",str(codigo)
     #print "formula:",formula
 
-    if comando == "GET":
+    if TipoControladora == "Monolitica": # Se a controladora eh monolitica, ou seja, grava local,
+                                         # entao chama a funcao apropriada na controladora monolitica.
 
-        if TipoControladora == "Monolitica":
+        if comando == "GET":
             return recuperar_monolitica(ModoPersistencia, codigo)
-        elif TipoControladora == "Berkeley":
-            return recuperar_berkeley(ModoPersistencia, codigo)
-        elif TipoControladora == "FTP":
-            return recuperar_ftp(ModoPersistencia, codigo)
-
-    elif comando == "POST":
-
-        if TipoControladora == "Monolitica":
+        elif comando == "POST":
             return incluir_monolitica(ModoPersistencia, formula)
-        elif TipoControladora == "Berkeley":
-            return incluir_berkeley(ModoPersistencia, formula)
-        elif TipoControladora == "FTP":
-            return incluir_ftp(ModoPersistencia, formula)
-
-    elif comando == "PUT":
-
-        if TipoControladora == "Monolitica":
+        elif comando == "PUT":
             return alterar_monolitica(ModoPersistencia, codigo, formula)
-        elif TipoControladora == "Berkeley":
-            return alterar_berkeley(ModoPersistencia, codigo, formula)
-        elif TipoControladora == "FTP":
-            return alterar_ftp(ModoPersistencia, codigo, formula)
-
-    elif comando == "DELETE":
-
-        if TipoControladora == "Monolitica":
+        elif comando == "DELETE":
             return excluir_monolitica(ModoPersistencia, codigo)
-        elif TipoControladora == "Berkeley":
-            return excluir_berkeley(ModoPersistencia, codigo)
-        elif TipoControladora == "FTP":
-            return excluir_ftp(ModoPersistencia, codigo)
-
-    elif comando == "OPTIONS":
-
-        if TipoControladora == "Monolitica":
+        elif comando == "OPTIONS":
             return listar_monolitica(ModoPersistencia)
-        elif TipoControladora == "Berkeley":
-            return listar_berkeley(ModoPersistencia)
-        elif TipoControladora == "FTP":
-            return listar_ftp(ModoPersistencia)
-
-    elif comando == "HEAD":
-
-        if TipoControladora == "Monolitica":
+        elif comando == "HEAD":
             return limpar_monolitica(ModoPersistencia)
-        elif TipoControladora == "Berkeley":
-            return limpar_berkeley(ModoPersistencia)
-        elif TipoControladora == "FTP":
-            return limpar_ftp(ModoPersistencia)
-
-    elif comando == "TRACE":
-
-        if TipoControladora == "Monolitica":
+        elif comando == "TRACE":
             return valida_monolitica(ModoPersistencia, ValidacaoFormula, codigo)
-        elif TipoControladora == "Berkeley":
-            return valida_berkeley(ModoPersistencia, ValidacaoFormula, codigo)
-        elif TipoControladora == "FTP":
-            return valida_ftp(ModoPersistencia, ValidacaoFormula, codigo)
-
-    elif comando == "CONNECT":
-
-        if TipoControladora == "Monolitica":
+        elif comando == "CONNECT":
             return executa_monolitica(ValidacaoFormula, formula)
-        elif TipoControladora == "Berkeley":
-            return executa_berkeley(ValidacaoFormula, formula)
-        elif TipoControladora == "FTP":
-            return executa_ftp(ValidacaoFormula, formula)
+
+    elif TipoControladora == "Berkeley": # Se a controladora eh Berkeley Socket, chama funcao
+                                         # apropriada pra enviar o comando pela rede.
+        return envia_comando_berkeley(ModoPersistencia,ValidacaoFormula,comando,codigo,formula)
+
+    elif TipoControladora == "FTP":      # Se a controladora eh FTP, chama funcao
+                                         # apropriada pra enviar o comando pela rede.
+        return envia_comando_ftp(ModoPersistencia,ValidacaoFormula,comando,codigo,formula)
+
 
 

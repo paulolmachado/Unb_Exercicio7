@@ -23,39 +23,43 @@ while 1:
     data = client.recv(p2p_msg_size)
     if data:
         print "Dado recebido:",data
-        if data.find("|") < 1: # Se nao foi passado a primeira parte da mensagem com o tipo de persistencia ...
-            ModoPersistencia = "Textual" # ... entao assume a persistencia "Textual".
-            Mensagem = data
-        else:
-            ModoPersistencia = data.split("|",1)[0]
-            Mensagem = data.split("|",1)[1]
-        print "ModoPersistencia:",ModoPersistencia
-        print "Mensagem:",Mensagem
+        if data.find("|") < 4: # Se nao foram passados os 5 parametros, entao mensagem esta fora do padrao necessario.
+            client.send("Mensagem com quantidade de parametros invalida: "+data)
 
-        # Trata as mensagens
-        comando = Mensagem.split(" ",1)[0]
-        parametro1 = Mensagem.split(" ",1)[1]
-        try:
-            parametro2 = Mensagem.split(" ",2)[2]
-        except:
-            parametro2 = None
+        # Desencapsula a mensagem
+        ModoPersistencia=data.split("|")[0]
+        ValidacaoFormula=data.split("|")[1]
+        comando=data.split("|")[2]
+        if (data.split("|")[3] == None) or (data.split("|")[3] == "None"):
+            codigo = None
+        else:
+            codigo=int(data.split("|")[3])
+        formula=data.split("|")[4]
+
+        # Debug :D
+        #print "ModoPersistencia:",ModoPersistencia
+        #print "ValidacaoFormula:",ValidacaoFormula
+        #print "comando:",comando
+        #print "codigo:",str(codigo)
+        #print "formula:",formula
+        #print "\n"
 
         if comando == "GET":
-            resultado = recuperar_monolitica(ModoPersistencia, int(parametro1))
-            if resultado == None:
-                client.send("")
-            else:
-                client.send(resultado)
+            client.send(recuperar_monolitica(ModoPersistencia, codigo))
         elif comando == "POST":
-            client.send(incluir_monolitica(ModoPersistencia, parametro1))
+            client.send(incluir_monolitica(ModoPersistencia, formula))
         elif comando == "PUT":
-            client.send(alterar_monolitica(ModoPersistencia, int(parametro1), parametro2))
+            client.send(alterar_monolitica(ModoPersistencia, codigo, formula))
         elif comando == "DELETE":
-            client.send(excluir_monolitica(ModoPersistencia, int(parametro1)))
+            client.send(excluir_monolitica(ModoPersistencia, codigo))
         elif comando == "OPTIONS":
             client.send(listar_monolitica(ModoPersistencia))
         elif comando == "HEAD":
             client.send(limpar_monolitica(ModoPersistencia))
+        elif comando == "TRACE":
+            client.send(valida_monolitica(ModoPersistencia, ValidacaoFormula, codigo))
+        elif comando == "CONNECT":
+            client.send(executa_monolitica(ValidacaoFormula, formula))
         else:
-            client.send("Comando invalido:"+Mensagem)
+            client.send("Comando invalido:"+comando)
     client.close()
