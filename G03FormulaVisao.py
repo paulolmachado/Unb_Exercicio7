@@ -23,25 +23,10 @@ def VisaoEmiteComando(opcao):
     global ValidacaoFormula
 
     argumentos = opcao.split() # Separa argumentos
-    comando = argumentos[0].upper() # Obtem primeiro argumento: comando
-
-    # Se o comando for HELP ou for um comando fora da lista, entao mostra sintaxe geral.
-    if (comando == "HELP") or (not any(comando in s for s in opcoes)):
-        return """
-            Sintaxe:
-                GET <codigo>           # Recuperar
-                POST <formula>         # Incluir
-                PUT <codigo> <formula> # Alterar
-                DELETE <codigo>        # Excluir
-                OPTIONS                # Listar todas
-                HEAD                   # Limpar todas
-                TRACE <codigo>         # Executar formula da base
-                CONNECT <formula>      # Executar formula
-                PERSIST <tipo>         # Tipo de Persistencia (Textual ou SGBD) - Default: Textual
-                CONTROL <tipo>         # Tipo de Controladora (Monolitica ou Berkeley ou FTP) - Defaul: Monolitica
-                VALID <tipo>           # Tipo de validacao de formula (eval ou arvore) - Default: eval
-                QUIT                   # Sai do programa (valido apenas na camada de interface do usuario)
-        """
+    if opcao == None or opcao == "":
+        comando = "HELP"
+    else:
+        comando = argumentos[0].upper() # Obtem primeiro argumento: comando
 
     # Define os parametros codigo (posicao da formula na base) e formula (formula propriamente dita)
     if comando == "GET":
@@ -97,6 +82,25 @@ def VisaoEmiteComando(opcao):
             ValidacaoFormula = argumentos[1]
             return "Tipo de validacao de formula alterada para "+ValidacaoFormula
 
-    # Chama rotina para processamento dos comandos
-    return processa_comando(ModoPersistencia,TipoControladora,ValidacaoFormula,comando,codigo,formula)
+    if comando in opcoes:
+
+        # Chama rotina para processamento dos comandos
+        return processa_comando(ModoPersistencia,TipoControladora,ValidacaoFormula,comando,codigo,formula)
+
+    else: # Se nao for nenhum comando a ser enviado para camada de visao, entao imprime um "help"
+        return """
+            Sintaxe:
+                GET <codigo>           # Recuperar
+                POST <formula>         # Incluir
+                PUT <codigo> <formula> # Alterar
+                DELETE <codigo>        # Excluir
+                OPTIONS                # Listar todas
+                HEAD                   # Limpar todas
+                TRACE <codigo>         # Executar formula da base
+                CONNECT <formula>      # Executar formula
+                PERSIST <tipo>         # Tipo de Persistencia (Textual ou SGBD) - Default: Textual
+                CONTROL <tipo>         # Tipo de Controladora (Monolitica ou Berkeley ou FTP) - Defaul: Monolitica
+                VALID <tipo>           # Tipo de validacao de formula (eval ou arvore) - Default: eval
+                QUIT                   # Sai do programa (valido apenas na camada de interface do usuario)
+        """
 

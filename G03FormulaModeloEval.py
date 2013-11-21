@@ -9,3 +9,5 @@ def validar_eval(formula):
         return str(resultado)
     except:
         return "Formula invalida"
+
+

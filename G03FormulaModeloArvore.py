@@ -1,7 +1,17 @@
 #! /usr/bin/env python
 # -*- coding: iso-8859-15 -*-
 
-#from calculadora import *
+def somar(primeiro, segundo):
+    return primeiro + segundo
+
+def subtrair(primeiro, segundo):
+    return primeiro - segundo
+
+def multiplicar(primeiro, segundo):
+    return primeiro * segundo
+
+def dividir(primeiro, segundo):
+    return primeiro / segundo
 
 numeros   = ["0","1","2","3","4","5","6","7","8","9","10"]
 operacoes = ["/","*","+","-"]
@@ -231,20 +241,14 @@ def apresentarArvore(formula, resultado):
 # Lista de formulas aonde lista = [nonono, nonono, nonono]
 formulas  = [ "5 + ((4/2) + 1 + 3)/2", "(5+4/2)+(3+1*9)", "5+2+1*((4*3)+1+2)", "((3/3) + 4)", "7 + 4 / 2 + (5 * 1)"]
 
-# Para cada formula dentro da lista formulas acima declarada
-for f in formulas:
-    print f,
-    print "=",
-    if (testarFormula(f)):
-        arvore = montaArvore(f)
-## Para cada iteracao do loop, chama executaArvoreRecursivo(arvore), funcao que resolve as operacoes matematicas da lista arvore.
-## Se o 4o elemento for difrente de none (nada), ou seja, o calculo atingiu todas as listas internas chegando a um resultado final da formula, ...
-##   entao imprime na tela o conteudo da lista resultante e sai do loop (break) interno voltando para o loop externo (f), passando para a proxima formula.
+def validar_arvore(formula):
+    if formula == None:
+        return "Formula vazia"
+    if testarFormula(formula):
+        arvore = montaArvore(formula)
         while True:
             executaArvoreRecursivo(arvore)
-            if (arvore[3] != None):
-                print str(arvore[3])
-                break
-
-a = raw_input("espera ....")
-exit()
+            if arvore[3] != None:
+                return str(arvore[3])
+    else:
+        return "Formula invalida"
