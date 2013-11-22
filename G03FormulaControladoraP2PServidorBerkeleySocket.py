@@ -23,7 +23,7 @@ while 1:
     data = client.recv(p2p_msg_size)
     if data:
         print "Dado recebido:",data
-        if data.find("|") < 4: # Se nao foram passados os 5 parametros, entao mensagem esta fora do padrao necessario.
+        if data.count("|") < 4: # Se nao foram passados os 5 parametros, entao mensagem esta fora do padrao necessario.
             client.send("Mensagem com quantidade de parametros invalida: "+data)
 
         # Desencapsula a mensagem
@@ -37,12 +37,12 @@ while 1:
         formula=data.split("|")[4]
 
         # Debug :D
-        #print "ModoPersistencia:",ModoPersistencia
-        #print "ValidacaoFormula:",ValidacaoFormula
-        #print "comando:",comando
-        #print "codigo:",str(codigo)
-        #print "formula:",formula
-        #print "\n"
+        print "ModoPersistencia:",ModoPersistencia
+        print "ValidacaoFormula:",ValidacaoFormula
+        print "comando:",comando
+        print "codigo:",str(codigo)
+        print "formula:",formula
+        print "\n"
 
         if comando == "GET":
             client.send(recuperar_monolitica(ModoPersistencia, codigo))

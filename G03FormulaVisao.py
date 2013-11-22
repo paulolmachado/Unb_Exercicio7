@@ -30,18 +30,26 @@ def VisaoEmiteComando(opcao):
 
     # Define os parametros codigo (posicao da formula na base) e formula (formula propriamente dita)
     if comando == "GET":
+        if len(argumentos) < 2:
+            return "GET: Faltando parametro"
         codigo = int(argumentos[1])
         formula = None
 
     elif comando == "POST":
+        if len(argumentos) < 2:
+            return "POST: Faltando parametro"
         codigo = None
         formula = opcao[len(comando)+1:]
 
     elif comando == "PUT":
+        if len(argumentos) < 3:
+            return "PUT: Faltando parametro"
         codigo = int(argumentos[1])
         formula = opcao[len(comando)+len(argumentos[1])+2:]
 
     elif comando == "DELETE":
+        if len(argumentos) < 2:
+            return "DELETE: Faltando parametro"
         codigo = int(argumentos[1])
         formula = None
 
@@ -54,14 +62,20 @@ def VisaoEmiteComando(opcao):
         formula = None
 
     elif comando == "TRACE":
+        if len(argumentos) < 2:
+            return "TRACE: Faltando parametro"
         codigo = int(argumentos[1])
         formula = None
 
     elif comando == "CONNECT":
+        if len(argumentos) < 2:
+            return "CONNECT: Faltando parametro"
         codigo = None
         formula = opcao[len(comando)+1:]
 
     elif comando == "PERSIST":
+        if len(argumentos) < 2:
+            return "PERSIST: Faltando parametro"
         if (argumentos[1] != "Textual") and (argumentos[1] != "SGBD"):
             return "Tipo de parametro invalido. Esperado Textual ou SGBD. Recebido:"+argumentos[1]
         else:
@@ -69,6 +83,8 @@ def VisaoEmiteComando(opcao):
             return "Tipo de pesistencia alterada para "+ModoPersistencia
 
     elif comando == "CONTROL":
+        if len(argumentos) < 2:
+            return "CONTROL: Faltando parametro"
         if (argumentos[1] != "Monolitica") and (argumentos[1] != "Berkeley") and (argumentos[1] != "FTP"):
             return "Tipo de parametro invalido. Esperado Monolitica ou Berkeley ou FTP. Recebido:"+argumentos[1]
         else:
@@ -76,6 +92,8 @@ def VisaoEmiteComando(opcao):
             return "Tipo de controladora alterada para "+TipoControladora
 
     elif comando == "VALID":
+        if len(argumentos) < 2:
+            return "VALID: Faltando parametro"
         if (argumentos[1] != "eval") and (argumentos[1] != "arvore"):
             return "Tipo de parametro invalido. Esperado eval ou arvore. Recebido:"+argumentos[1]
         else:

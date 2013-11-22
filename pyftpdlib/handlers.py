@@ -2022,16 +2022,16 @@ class FTPHandler(AsyncChat):
         # - If no argument, fall back on cwd as default.
         # - Some older FTP clients erroneously issue /bin/ls-like LIST
         #   formats in which case we fall back on cwd as default.
-        try:
-            iterator = self.run_as_current_user(self.fs.get_list_dir, path)
-        except (OSError, FilesystemError):
-            err = sys.exc_info()[1]
-            why = _strerror(err)
-            self.respond('550 %s.' % why)
-        else:
-            producer = BufferedIteratorProducer(iterator)
-            self.push_dtp_data(producer, isproducer=True, cmd="LIST")
-            return path
+##        try:
+##        iterator = self.run_as_current_user(self.fs.get_list_dir, path)
+##        except (OSError, FilesystemError):
+##            err = sys.exc_info()[1]
+##            why = _strerror(err)
+##            self.respond('550 %s.' % why)
+##        else:
+        producer = BufferedIteratorProducer(n for n in [path])
+        self.push_dtp_data(producer, isproducer=True, cmd="LIST")
+        return path
 
     def ftp_NLST(self, path):
         """Return a list of files in the specified directory in a

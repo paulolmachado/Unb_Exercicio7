@@ -8,20 +8,23 @@
 #
 
 import sys
+import os
 
-arq=''
+arq=file
 registros=[]
 
 ###################### Funcoes de apoio
 
 def __abrir(modo):
     global arq
+    nome_arquivo = os.sep+'formulas.txt'
     try:
-        arq = open('formulas.txt',modo)
+        arq = open(nome_arquivo,modo)
     except:
-        print('Nao foi possivel abrir o arquivo formulas.')
+        print('Nao foi possivel abrir o arquivo formulas: '+nome_arquivo)
 
 def __fechar():
+    global arq
     arq.close()
 
 def __salvar_registros(): # Salva a lista de formulas no arquivo
@@ -82,9 +85,8 @@ def textual_listar():
     return registros
 
 def textual_limpar():
-    __abrir('w')
-    arq.write('')
-    __fechar()
+    registros = []
+    __salvar_registros()
     return "Lista de formulas eliminada."
 
 

@@ -10,6 +10,7 @@
 from G03FormulaPersistenciaTextual import *
 from G03FormulaPersistenciaSGBD import *
 from G03FormulaModeloEval import *
+from G03FormulaModeloArvore import *
 
 def recuperar_monolitica(ModoPersistencia, codigo):
     if ModoPersistencia == "Textual":
@@ -65,7 +66,7 @@ def valida_monolitica(ModoPersistencia, ValidacaoFormula, codigo):
         if ValidacaoFormula == "eval":
             return validar_eval(formula)
         elif ValidacaoFormula == "arvore":
-            return validar_eval(formula)
+            return validar_arvore(formula)
         else:
             return "Tipo de validacao de formula invalido: "+ValidacaoFormula
 
@@ -73,6 +74,6 @@ def executa_monolitica(ValidacaoFormula, formula):
     if ValidacaoFormula == "eval":
         return validar_eval(formula)
     elif ValidacaoFormula == "arvore":
-        return validar_eval(formula)
+        return validar_arvore(formula)
     else:
         return "Tipo de validacao de formula invalido: "+ValidacaoFormula

@@ -6,55 +6,75 @@
 #            camada de controle.
 #
 
-import os
-#import socket
+import sys
+import G03FormulaControladoraMonolitica
 
 from pyftpdlib.authorizers import DummyAuthorizer
 from pyftpdlib.handlers import FTPHandler
+from pyftpdlib.handlers import BufferedIteratorProducer
 from pyftpdlib.servers import FTPServer
 
-class MeusHandler(FTPHandler):
-    def on_connect(self):
-        FTPHandler.on_connect();
-    def on_disconnect(self):
-        FTPHandler.on_disconnect();
-    def on_login(self, username):
-        FTPHandler.on_login(username);
-    def on_logout(self, username):
-        FTPHandler.on_logout(username);
-    def on_file_sent(self, file):
-        print "on_file_sent",file
-        FTPHandler.on_file_sent(file);
-        # do something when a file has been sent
-        pass
-    def on_file_received(self, file):
-        print "on_file_received",file
-        FTPHandler.file_received(file);
-    def on_incomplete_file_sent(self, file):
-        FTPHandler.on_incomplete_file_sent(file);
-    def on_incomplete_file_received(self, file):
-        FTPHandler.on_incomplete_file_received(file);
-        os.remove(file)
+class MyHandler(FTPHandler):
+    def ftp_LIST(self, path):
+        # Valida se a mensagem tem os 6 parametros.
+        path = path.encode('ascii','ignore')
+        if path.count("|") < 5: # Se nao foram passados os 5 parametros, entao mensagem esta fora do padrao necessario.
+            retorno = "Mensagem com quantidade de parametros invalida: "+path
+        else:
+            # Desencapsula a mensagem
+            Caminho = path.split("|")[0] # Caminho (path) que sempre vira por conta do protocolo FTP
+            ModoPersistencia = path.split("|")[1]
+            ValidacaoFormula = path.split("|")[2]
+            comando = path.split("|")[3]
+            if (path.split("|")[4] == None) or (path.split("|")[4] == "None"):
+                codigo = None
+            else:
+                codigo = int(path.split("|")[4])
+            formula = path.split("|")[5]
 
-p2p_server_port = 8081
+            # Debug :D
+            print "ModoPersistencia:",ModoPersistencia
+            print "ValidacaoFormula:",ValidacaoFormula
+            print "comando:",comando
+            print "codigo:",codigo
+            print "formula:",formula
+            print "\n"
+
+            if comando == "GET":
+                retorno = G03FormulaControladoraMonolitica.recuperar_monolitica(ModoPersistencia, codigo)
+            elif comando == "POST":
+                retorno = G03FormulaControladoraMonolitica.incluir_monolitica(ModoPersistencia, formula)
+            elif comando == "PUT":
+                retorno = G03FormulaControladoraMonolitica.alterar_monolitica(ModoPersistencia, codigo, formula)
+            elif comando == "DELETE":
+                retorno = G03FormulaControladoraMonolitica.excluir_monolitica(ModoPersistencia, codigo)
+            elif comando == "OPTIONS":
+                retorno = G03FormulaControladoraMonolitica.listar_monolitica(ModoPersistencia)
+            elif comando == "HEAD":
+                retorno = G03FormulaControladoraMonolitica.limpar_monolitica(ModoPersistencia)
+            elif comando == "TRACE":
+                retorno = G03FormulaControladoraMonolitica.valida_monolitica(ModoPersistencia, ValidacaoFormula, codigo)
+            elif comando == "CONNECT":
+                retorno = G03FormulaControladoraMonolitica.executa_monolitica(ValidacaoFormula, formula)
+            else:
+                retorno = "Comando invalido:"+comando
+
+        producer = BufferedIteratorProducer(n for n in [retorno.encode('ascii','ignore')+"\n"])
+        self.push_dtp_data(producer, isproducer=True, cmd="LIST")
+        return path
+
+p2p_server_port = 21
 p2p_usuario="dummy"
 p2p_senha="dummy"
 
 authorizer = DummyAuthorizer()
-authorizer.add_user(p2p_usuario, p2p_senha, os.getcwd(), perm='elradfmw')
-authorizer.add_anonymous(os.getcwd())
-handler = MeusHandler
+authorizer.add_user(p2p_usuario, p2p_senha, "/", perm="elradfmw")
+authorizer.add_anonymous("/")
+
+handler =  MyHandler #FTPHandler
 handler.authorizer = authorizer
 
-# Specify a masquerade address and the range of ports to use for
-# passive connections.  Decomment in case you're behind a NAT.
-if (p2p_ipnat != ""):
-    handler.masquerade_address = "" #ipnat
-    handler.passive_ports = range(60000, 65535)
-
-# Instantiate FTP server class and listen on <localhost>:2121
-address = ("127.0.0.1", p2p_server_port)
-server = FTPServer(address, handler)
+server = FTPServer(("127.0.0.1", p2p_server_port), handler)
 
 # set a limit for connections
 server.max_cons = 256

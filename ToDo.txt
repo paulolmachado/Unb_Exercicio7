@@ -1,2 +1,2 @@
 1. Adicionar parametro de retorno de erro para melhor controle nas execucoes das funcoes.
-
+2. Validar se o cogigo (posição da fórmula no arquivo) passado pelo usuário é um inteiro válido

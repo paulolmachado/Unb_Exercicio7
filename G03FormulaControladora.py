@@ -8,7 +8,7 @@
 
 from G03FormulaControladoraMonolitica import *
 from G03FormulaControladoraP2PClienteBerkeleySocket import *
-#from G03FormulaControladoraP2PClienteFTP import *
+from G03FormulaControladoraP2PClienteFTP import *
 
 def processa_comando(ModoPersistencia,TipoControladora,ValidacaoFormula,comando,codigo,formula):
     #print "ModoPersistencia:",ModoPersistencia
